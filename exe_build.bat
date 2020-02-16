@@ -1,0 +1,1 @@
+pyinstaller --console --onefile --icon assets\icon.ico src\AMXX_CSV_Converter.py
