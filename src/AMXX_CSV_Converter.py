@@ -6,6 +6,8 @@ import errno
 import ctypes
 import platform
 
+__version__ = "1.0.1"
+
 
 def Convert_CSV_to_INI(input, output, encoding='utf-8'):
     iniWriter = configparser.RawConfigParser()
@@ -42,7 +44,7 @@ def Convert_CSV_to_INI(input, output, encoding='utf-8'):
         sys.exit(2)
     with open(output, 'w', encoding=encoding) as configfile:
         iniWriter.write(configfile)
-        _print(f'\tDONE: New lang file succefully created: "{output}"', success = 1)
+        _print(f'\tDONE: New lang file succefully created: "{output}"', success=1)
 
 
 def Convert_INI_to_CSV(input, output, encoding='utf-8'):
@@ -94,12 +96,13 @@ def main(argv):
     args_count = len(argv)
 
     if(args_count < 2):
-        _print(f''' Usage: {os.path.basename(argv[0])} <inputfile> <outputfile> -e <encoding>
+        programmName = os.path.basename(sys.argv[0])
+        _print(f''' Usage: {programmName} <inputfile> <outputfile> -e <encoding>
     Examples:
-{os.path.basename(argv[0])} file.csv file.ini (Converts .csv -> .ini)
-{os.path.basename(argv[0])} file.ini file.csv (Converts .ini -> .csv)
-{os.path.basename(argv[0])} file.ini (Converts file.ini -> file.csv)
-{os.path.basename(argv[0])} file.csv (Converts file.csv -> file.ini)
+{programmName} file.csv file.ini (Converts .csv -> .ini)
+{programmName} file.ini file.csv (Converts .ini -> .csv)
+{programmName} file.ini (Converts file.ini -> file.csv)
+{programmName} file.csv (Converts file.csv -> file.ini)
         ''')
         sys.exit(2)
 
@@ -127,7 +130,13 @@ def main(argv):
 def _print(text, success=0):
     print(text)
     if(platform.system() == 'Windows'):
-        ctypes.windll.user32.MessageBoxW(0, text.strip(), os.path.basename(sys.argv[0]), 0x00000040 if(success == 1) else 0x00000010)
+        ctypes.windll.user32.MessageBoxW(
+            0, text.strip(), getAppName(), 0x00000040 if(success == 1) else 0x00000010)
+
+
+def getAppName():
+    return os.path.basename(sys.argv[0]).replace('.exe', '').replace('.py', '') \
+        + ' ' + __version__
 
 
 if __name__ == "__main__":
