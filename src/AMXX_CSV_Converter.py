@@ -126,7 +126,7 @@ def main(argv):
 
 def _print(text, success=0):
     print(text)
-    if(platform.system == 'Windows'):
+    if(platform.system() == 'Windows'):
         ctypes.windll.user32.MessageBoxW(0, text.strip(), os.path.basename(sys.argv[0]), 0x00000040 if(success == 1) else 0x00000010)
 
 
