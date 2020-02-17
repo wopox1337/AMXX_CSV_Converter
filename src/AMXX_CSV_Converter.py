@@ -94,12 +94,12 @@ def main(argv):
     args_count = len(argv)
 
     if(args_count < 2):
-        _print(f'''\tUsage: {os.path.basename(argv[0])} <inputfile> <outputfile> -e <encoding>
-              Examples:
-                {os.path.basename(argv[0])} file.csv file.ini (Converts .csv -> .ini)
-                {os.path.basename(argv[0])} file.ini file.csv (Converts .ini -> .csv)
-                {os.path.basename(argv[0])} file.ini (Converts file.ini -> file.csv)
-                {os.path.basename(argv[0])} file.csv (Converts file.csv -> file.ini)
+        _print(f''' Usage: {os.path.basename(argv[0])} <inputfile> <outputfile> -e <encoding>
+    Examples:
+{os.path.basename(argv[0])} file.csv file.ini (Converts .csv -> .ini)
+{os.path.basename(argv[0])} file.ini file.csv (Converts .ini -> .csv)
+{os.path.basename(argv[0])} file.ini (Converts file.ini -> file.csv)
+{os.path.basename(argv[0])} file.csv (Converts file.csv -> file.ini)
         ''')
         sys.exit(2)
 
