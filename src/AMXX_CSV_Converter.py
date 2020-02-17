@@ -42,7 +42,7 @@ def Convert_CSV_to_INI(input, output, encoding='utf-8'):
         sys.exit(2)
     with open(output, 'w', encoding=encoding) as configfile:
         iniWriter.write(configfile)
-        _print(f'\tDONE: New lang file succefully created: "{output}"', 'DONE')
+        _print(f'\tDONE: New lang file succefully created: "{output}"', success = 1)
 
 
 def Convert_INI_to_CSV(input, output, encoding='utf-8'):
@@ -81,7 +81,7 @@ def Convert_INI_to_CSV(input, output, encoding='utf-8'):
                 for row in rows:
                     csvWriter.writerow(row)
 
-                _print(f'\tDONE: New lang file succefully created: "{output}"')
+                _print(f'\tDONE: New lang file succefully created: "{output}"', success=1)
         except Exception as err:
             _print(f'\tERROR: {err.args[1]}: "{output}"')
             sys.exit(2)
@@ -124,10 +124,10 @@ def main(argv):
     sys.exit(0)
 
 
-def _print(text, title='ERROR'):
+def _print(text, success=0):
     print(text)
     if(platform.system == 'Windows'):
-        ctypes.windll.user32.MessageBoxW(0, text, title, 1)
+        ctypes.windll.user32.MessageBoxW(0, text.strip(), os.path.basename(sys.argv[0]), 0x00000040 if(success == 1) else 0x00000010)
 
 
 if __name__ == "__main__":
