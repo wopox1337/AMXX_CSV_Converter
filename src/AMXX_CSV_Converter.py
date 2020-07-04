@@ -97,7 +97,7 @@ def main(argv):
 
     if(args_count < 2):
         programmName = os.path.basename(sys.argv[0])
-        _print(f''' Usage: {programmName} <inputfile> <outputfile> -e <encoding>
+        _print(f''' Usage: {programmName} <inputfile> <outputfile> <encoding>
     Examples:
 {programmName} file.csv file.ini (Converts .csv -> .ini)
 {programmName} file.ini file.csv (Converts .ini -> .csv)
