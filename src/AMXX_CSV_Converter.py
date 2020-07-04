@@ -27,7 +27,8 @@ def Convert_CSV_to_INI(input, output, encoding='utf-8'):
                         # if(row[lang] == ''):
                             # row[lang] = '-'
                         # _print(f'\t[{lang}] {key} = {row[lang]}')
-                        iniWriter.set(lang, key, row[lang])
+                        if(row[lang]):
+                            iniWriter.set(lang, key, row[lang])
     except Exception as err:
         _print(f'\tERROR: {err.args[1]}: "{input}"')
         sys.exit(2)
