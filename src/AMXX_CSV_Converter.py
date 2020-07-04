@@ -65,17 +65,21 @@ def Convert_INI_to_CSV(input, output, encoding='utf-8'):
                 csvWriter.writerow(sections)
                 keys = []
                 values = []
-                i = 0
                 for lang in sections:
-                    i = i + 1
                     if(lang == ''):
                         continue
-                    # if(i > 6):
-                        # break
-                    valuesForLang = []
                     for(key, value) in iniLang.items(lang):
-                        keys.append(key)
-                        valuesForLang.append(value)
+                        if(key not in keys):
+                            keys.append(key)
+                for lang in sections:
+                    if(lang == ''):
+                        continue
+                    valuesForLang = []
+                    for key in keys:
+                        if iniLang.has_option(lang, key):
+                            valuesForLang.append(iniLang.get(lang, key))
+                        else:
+                            valuesForLang.append('')
                         # _print(f'{key} = {value}')
                     # _print(f'{valuesForLang}')
                     values.append(valuesForLang)
