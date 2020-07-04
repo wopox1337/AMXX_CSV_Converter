@@ -54,9 +54,6 @@ def Convert_INI_to_CSV(input, output, encoding='utf-8'):
     try:
         iniLang.read(input, encoding=encoding)
 
-        if(len(iniLang.sections()) < 1):
-            _print(f'No have sections to parse in file {input}')
-            return
         try:
             with(open(output, 'w', encoding=encoding, newline='')) as CSVfile:
                 csvWriter = csv.writer(CSVfile, delimiter=',')
