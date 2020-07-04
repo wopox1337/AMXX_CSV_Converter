@@ -60,31 +60,20 @@ def Convert_INI_to_CSV(input, output, encoding='utf-8'):
         try:
             with(open(output, 'w', encoding=encoding, newline='')) as CSVfile:
                 csvWriter = csv.writer(CSVfile, delimiter=',')
-                sections = ['']
-                sections.extend(iniLang.sections())
-                csvWriter.writerow(sections)
+                sections = iniLang.sections()
+                csvWriter.writerow(['', *sections])
                 keys = []
                 values = []
                 for lang in sections:
-                    if(lang == ''):
-                        continue
-                    for(key, value) in iniLang.items(lang):
+                    for key in iniLang.options(lang):
                         if(key not in keys):
                             keys.append(key)
                 for lang in sections:
-                    if(lang == ''):
-                        continue
                     valuesForLang = []
                     for key in keys:
-                        if iniLang.has_option(lang, key):
-                            valuesForLang.append(iniLang.get(lang, key))
-                        else:
-                            valuesForLang.append('')
-                        # _print(f'{key} = {value}')
-                    # _print(f'{valuesForLang}')
+                        valuesForLang.append(iniLang.get(lang, key) if iniLang.has_option(lang, key) else '')
                     values.append(valuesForLang)
-                values.insert(0, keys)
-                rows = zip(*values)
+                rows = zip(keys, *values)
                 for row in rows:
                     csvWriter.writerow(row)
 
