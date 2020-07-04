@@ -117,11 +117,15 @@ def main(argv):
     if('.csv' in inputFile):
         if(args_count == 2):
             outputFile = inputFile.replace('.csv', '.ini')
+        else:
+            outputFile = argv[2]
         Convert_CSV_to_INI(inputFile, outputFile, encoding)
     elif('.ini' in inputFile or '.txt' in inputFile):
         if(args_count == 2):
             outputFile = inputFile.replace(
                 '.ini', '.csv').replace('.txt', '.csv')
+        else:
+            outputFile = argv[2]
         Convert_INI_to_CSV(inputFile, outputFile, encoding)
 
     sys.exit(0)
