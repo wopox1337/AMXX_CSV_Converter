@@ -27,7 +27,8 @@ def Convert_CSV_to_INI(input, output, encoding='utf-8'):
                         # if(row[lang] == ''):
                             # row[lang] = '-'
                         # _print(f'\t[{lang}] {key} = {row[lang]}')
-                        iniWriter.set(lang, key, row[lang])
+                        if(row[lang]):
+                            iniWriter.set(lang, key, row[lang])
     except Exception as err:
         _print(f'\tERROR: {err.args[1]}: "{input}"')
         sys.exit(2)
@@ -53,33 +54,23 @@ def Convert_INI_to_CSV(input, output, encoding='utf-8'):
     try:
         iniLang.read(input, encoding=encoding)
 
-        if(len(iniLang.sections()) < 1):
-            _print(f'No have sections to parse in file {input}')
-            return
         try:
             with(open(output, 'w', encoding=encoding, newline='')) as CSVfile:
                 csvWriter = csv.writer(CSVfile, delimiter=',')
-                sections = ['']
-                sections.extend(iniLang.sections())
-                csvWriter.writerow(sections)
+                sections = iniLang.sections()
+                csvWriter.writerow(['', *sections])
                 keys = []
                 values = []
-                i = 0
                 for lang in sections:
-                    i = i + 1
-                    if(lang == ''):
-                        continue
-                    # if(i > 6):
-                        # break
+                    for key in iniLang.options(lang):
+                        if(key not in keys):
+                            keys.append(key)
+                for lang in sections:
                     valuesForLang = []
-                    for(key, value) in iniLang.items(lang):
-                        keys.append(key)
-                        valuesForLang.append(value)
-                        # _print(f'{key} = {value}')
-                    # _print(f'{valuesForLang}')
+                    for key in keys:
+                        valuesForLang.append(iniLang.get(lang, key) if iniLang.has_option(lang, key) else '')
                     values.append(valuesForLang)
-                values.insert(0, keys)
-                rows = zip(*values)
+                rows = zip(keys, *values)
                 for row in rows:
                     csvWriter.writerow(row)
 
@@ -97,7 +88,7 @@ def main(argv):
 
     if(args_count < 2):
         programmName = os.path.basename(sys.argv[0])
-        _print(f''' Usage: {programmName} <inputfile> <outputfile> -e <encoding>
+        _print(f''' Usage: {programmName} <inputfile> <outputfile> <encoding>
     Examples:
 {programmName} file.csv file.ini (Converts .csv -> .ini)
 {programmName} file.ini file.csv (Converts .ini -> .csv)
@@ -115,13 +106,14 @@ def main(argv):
     encoding = argv[3] if(len(argv) > 3) else 'utf-8'
 
     if('.csv' in inputFile):
-        if(args_count == 2):
-            outputFile = inputFile.replace('.csv', '.ini')
+        outputFile = (
+            inputFile.replace('.csv', '.ini') if (args_count == 2) else argv[2]
+        )
         Convert_CSV_to_INI(inputFile, outputFile, encoding)
     elif('.ini' in inputFile or '.txt' in inputFile):
-        if(args_count == 2):
-            outputFile = inputFile.replace(
-                '.ini', '.csv').replace('.txt', '.csv')
+        outputFile = (
+            inputFile.replace('.ini', '.csv').replace('.txt', '.csv') if (args_count == 2) else argv[2]
+        )
         Convert_INI_to_CSV(inputFile, outputFile, encoding)
 
     sys.exit(0)
